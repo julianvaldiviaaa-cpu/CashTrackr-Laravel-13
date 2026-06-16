@@ -31,4 +31,4 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 # Configurar Nginx
 COPY ./nginx.conf /etc/nginx/sites-available/default
 
-CMD service nginx start && php-fpm
+CMD php artisan migrate --force && service nginx start && php-fpm
