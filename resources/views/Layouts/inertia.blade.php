@@ -18,7 +18,7 @@
     <x-inertia::head/>
 
 
-    @if (file_exists(public_path('build/.vite/manifest.json')) || file_exists(public_path('hot')))
+    @if (file_exists(public_path('build/manifest.json')) || file_exists(public_path('hot')))
         @vite(['resources/css/app.css', "resources/js/inertia.tsx"])
     @endif
 

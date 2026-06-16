@@ -18,13 +18,10 @@ export default defineConfig({
         }),
         tailwindcss(),
         react(),
-        inertia(),
+        inertia({
+            ssr: 'resources/js/inertia.tsx',
+        })
     ],
-    build: {
-        manifest: true,
-        outDir: 'public/build',
-        assetsDir: 'assets',
-    },
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
