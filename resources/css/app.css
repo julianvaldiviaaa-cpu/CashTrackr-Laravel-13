@@ -1,0 +1,45 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+@source '../**/*.blade.php';
+@source '../**/*.js';
+
+
+@font-face {
+    font-family: "SuisseIntl-Light";
+    src: url("/resources/Fonts/SuisseIntl/SuisseIntl-Light.woff2");
+}
+
+@font-face {
+    font-family: "SuisseIntl-Regular";
+    src: url("/resources/Fonts/SuisseIntl/SuisseIntl-Regular.woff2");
+
+}
+
+@theme {
+    --font-sans: "SuisseIntl-Light", sans-serif;
+    --font-suisse-intl: "SuisseIntl-Light";
+    --font-suisse-intl-regular: "SuisseIntl-Regular";
+
+    --color-purple-principal: #36255C;
+    --color-purple-principal-hover: #2A1A4E;
+    --color-purple-secondary: #D2C3F6;
+    --color-purple-secondary-hover: #C4B9F2;
+    --color-general-projects: #CDFC8A
+
+}
+
+@layer utilites {
+    .SuisseIntl-Light {
+        font-family: var(--font-suisse-intl);
+    }
+
+    .SuisseIntl-Regular {
+        font-family: var(--font-suisse-intl-regular);
+    }
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
