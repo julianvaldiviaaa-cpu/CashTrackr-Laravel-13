@@ -20,6 +20,11 @@ export default defineConfig({
         react(),
         inertia(),
     ],
+    build: {
+        manifest: true,
+        outDir: 'public/build',
+        assetsDir: 'assets',
+    },
     server: {
         watch: {
             ignored: ['**/storage/framework/views/**'],
