@@ -45,9 +45,7 @@ COPY ./nginx.conf /etc/nginx/sites-available/default
 
 RUN ls -la /var/www/public/build/ && cat /var/www/public/build/.vite/manifest.json || echo "MANIFEST NOT FOUND"
 
-CMD ls -la /var/www/public/build/ && \
-    cat /var/www/public/build/.vite/manifest.json && \
-    php artisan config:cache && \
+CMD php artisan config:cache && \
     php artisan migrate --force && \
     service nginx start && \
-    php-fpm
+    php-fpm -F 2>&1
