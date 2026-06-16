@@ -18,9 +18,7 @@ export default defineConfig({
         }),
         tailwindcss(),
         react(),
-        inertia({
-            ssr: 'resources/js/inertia.tsx',
-        })
+        inertia(),
     ],
     server: {
         watch: {
