@@ -50,4 +50,4 @@ CMD php artisan config:cache && \
     php-fpm -D && \
     sleep 2 && \
     service nginx start && \
-    tail -f /var/log/nginx/error.log
+    tail -f /var/log/nginx/error.log /var/www/storage/logs/laravel.log 2>/dev/null || tail -f /var/log/nginx/error.log
