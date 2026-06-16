@@ -48,4 +48,5 @@ RUN ls -la /var/www/public/build/ && cat /var/www/public/build/.vite/manifest.js
 CMD php artisan config:cache && \
     php artisan migrate --force && \
     service nginx start && \
-    php-fpm -F 2>&1
+    php-fpm -F 2>&1 & \
+    tail -f /var/log/nginx/error.log /var/www/storage/logs/laravel.log
