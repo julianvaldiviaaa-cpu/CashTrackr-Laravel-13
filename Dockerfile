@@ -43,5 +43,12 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 # Configurar Nginx
 COPY ./nginx.conf /etc/nginx/sites-available/default
 
+RUN ls -la /var/www/public/build/ && cat /var/www/public/build/.vite/manifest.json || echo "MANIFEST NOT FOUND"
+
 # Ejecutar migraciones automáticas y encender el servidor
-CMD php artisan migrate --force && service nginx start && php-fpm
+CMD php artisan config:cache && \
+    php artisan route:cache && \
+    php artisan view:cache && \
+    php artisan migrate --force && \
+    service nginx start && \
+    php-fpm
