@@ -1,6 +1,15 @@
+# === ETAPA 1: Compilar estilos y JavaScript ===
+FROM node:20-alpine AS frontend-builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm ci
+COPY . .
+RUN npm run build
+
+# === ETAPA 2: Configurar el servidor PHP y Nginx ===
 FROM php:8.2-fpm
 
-# Instalar dependencias del sistema esenciales, incluyendo libpq para PostgreSQL y Node.js con NPM
+# Instalar dependencias del sistema esenciales para Laravel y Neon (PostgreSQL)
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -10,30 +19,23 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     nginx \
-    libpq-dev \
-    gnupg
+    libpq-dev
 
-# Instalar Node.js (Versión 20) y NPM para compilar los estilos
-RUN curl -fsSL https://deb.nodesource.com/setup_20.x | build-dev=1 bash - \
-    && apt-get install -y nodesource-repo \
-    && apt-get install -y nodejs
-
-# Instalar extensiones de PHP optimizadas para Laravel y Neon (PostgreSQL)
+# Instalar extensiones de PHP
 RUN docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd
 
 # Instalar Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copiar el proyecto al contenedor
+# Copiar el proyecto al servidor
 WORKDIR /var/www
 COPY . .
 
-# Instalar dependencias de PHP
+# Instalar dependencias de PHP sin entorno de desarrollo
 RUN composer install --no-dev --optimize-autoloader --ignore-platform-reqs
 
-# Instalar dependencias de JavaScript y compilar estilos (Vite / React / Tailwind)
-RUN npm install
-RUN npm run build
+# TRAER LOS ESTILOS COMPILADOS DESDE LA ETAPA 1
+COPY --from=frontend-builder /app/public/build ./public/build
 
 # Configurar permisos para Laravel
 RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
@@ -41,5 +43,5 @@ RUN chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 # Configurar Nginx
 COPY ./nginx.conf /etc/nginx/sites-available/default
 
-# Correr migraciones automáticamente y encender el servidor
+# Ejecutar migraciones automáticas y encender el servidor
 CMD php artisan migrate --force && service nginx start && php-fpm
